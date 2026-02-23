@@ -1,9 +1,15 @@
 # Ignore model weights
 models/
 model/
-AFM/train/web_agent/rl/*/
 verl_0_7/
 environment.sh
+
+# ===== RL training runs (ignore folders, keep scripts) =====
+AFM/train/web_agent/rl/*/
+!AFM/train/web_agent/rl/*.sh
+
+# Ignore logs in rl/
+AFM/train/web_agent/rl/*.log
 
 # Python
 __pycache__/

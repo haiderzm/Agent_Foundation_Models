@@ -8,10 +8,15 @@ serper_key_pool = [
 ]
 
 qwen_api_pool = [
+    # {
+    #     "url": "https://api.uniapi.vip/v1",
+    #     "key": os.environ.get("UNI_API_KEY"),
+    #     "model": "qwen2.5-72b-instruct",
+    # },
     {
-        "url": "https://api.uniapi.vip/v1",
+        "url": "https://api.openai.com/v1",
         "key": os.environ.get("UNI_API_KEY"),
-        "model": "qwen2.5-72b-instruct",
+        "model": "gpt-4.1-mini",
     },
     # other qwen api provider ...
 ]

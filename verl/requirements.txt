@@ -111,7 +111,7 @@ feedparser==6.0.11
 ffmpy==0.5.0
 filelock==3.17.0
 fire==0.7.0
-flash_attn==2.7.4.post1
+# flash_attn==2.7.4.post1
 Flask==3.1.0
 Flask-Login==0.6.3
 Flask-Mail==0.10.0
@@ -354,7 +354,7 @@ PubChemPy==1.0.4
 pure_eval==0.2.3
 py-cpuinfo==9.0.0
 py-spy==0.4.0
-pyairports==2.1.1
+# pyairports==2.1.1
 pyarrow==20.0.0
 pyasn1==0.6.1
 pyasn1_modules==0.4.1
@@ -482,12 +482,12 @@ tokenizers==0.21.0
 toml==0.10.2
 tomli==2.2.1
 tomlkit==0.13.2
-torch==2.6.0
+# torch==2.6.0
 torch-complex==0.4.4
-torchaudio==2.6.0
+# torchaudio==2.6.0
 torchdata==0.11.0
 torchmetrics==1.6.1
-torchvision==0.21.0
+# torchvision==0.21.0
 tornado==6.4.2
 tqdm==4.67.1
 traitlets==5.14.3

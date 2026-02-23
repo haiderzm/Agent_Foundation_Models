@@ -60,7 +60,7 @@ class CrawlPageV2Tool(BaseTool):
         server_host = os.environ.get("SERVER_HOST")
         if not server_host:
             raise ValueError(f"SERVER_HOST({server_host}) is not set and server_host.tmp file not found")
-        self.crawl_page_endpoint = f"http://{server_host}:9000/crawl_page"
+        self.crawl_page_endpoint = f"http://{server_host}:9100/crawl_page"
         self.summary_type = config.get("summary_type", "once")
         self.chunk_size = config.get("chunk_size", 8192)
         self.do_last_summary = config.get("do_last_summary", False)

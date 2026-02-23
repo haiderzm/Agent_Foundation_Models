@@ -63,7 +63,7 @@ class SerperCacheAPITool(BaseTool):
         server_host = os.environ.get("SERVER_HOST")
         if not server_host:
             raise ValueError(f"SERVER_HOST({server_host}) is not set and server_host.tmp file not found")
-        self.serper_cache_url = f"http://{server_host}:9001/search"
+        self.serper_cache_url = f"http://{server_host}:9101/search"
         self.serper_api_key = os.environ.get("WEB_SEARCH_SERPER_API_KEY")
         self.timeout = 500
         self.num_results = config.get("num_results", 10)
