@@ -1,3 +1,31 @@
+# Ignore model weights
+models/
+model/
+AFM/train/web_agent/rl/*/
+verl_0_7/
+environment.sh
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Large model files
+*.pt
+*.bin
+*.ckpt
+*.safetensors
+
+# Notebooks checkpoints
+.ipynb_checkpoints/
+
+# Zips
+*.zip
+
+# OS files
+.DS_Store
+__MACOSX/
+
 **AFM/evaluation/web_agent/results**
 **cache**
 **notes**
