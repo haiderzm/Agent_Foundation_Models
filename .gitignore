@@ -1,3 +1,13 @@
+# Temp / junk
+*.xlsx
+*.jpg
+*~
+~/
+**/~/
+
+# Ignore apex
+apex/
+
 # Ignore model weights
 models/
 model/
@@ -190,4 +200,4 @@ tensorboard_log/
 path_to_your_database.db
 
 # server cache
-!AFM/tool_servers/web_server/v2/cache_serper_server_v2.py
+!AFM/tool_servers/web_server/v2/cache_serper_server_v2.pyapex/

@@ -57,3 +57,102 @@ tools:
               description: Whether to do final summary for multi-chunk/page results (default false)
               default: false
           required: ["query"]
+
+  - class_name: verl.tools.agentlego_v2_tools.OCRTool
+    config:
+      timeout_s: 180
+      dataset: "GTA"
+      port: 9400
+      max_retries: 1
+    tool_schema:
+      type: function
+      function:
+        name: ocr
+        description: Run OCR on an image. Input is JSON string like {"path":"image_2.jpg"}.
+        parameters:
+          type: object
+          properties:
+            query:
+              type: string
+              description: JSON string payload, e.g. {"path":"image_2.jpg"}
+          required: ["query"]
+
+  # AgentLego - Image Description
+  - class_name: verl.tools.agentlego_v2_tools.ImageDescriptionTool
+    config:
+      timeout_s: 180
+      dataset: "GTA"
+      port: 9400
+      max_retries: 1
+    tool_schema:
+      type: function
+      function:
+        name: image_description
+        description: Describe an image. Input is JSON string like {"path":"image_1.jpg"}.
+        parameters:
+          type: object
+          properties:
+            query:
+              type: string
+              description: JSON string payload, e.g. {"path":"image_1.jpg"}
+          required: ["query"]
+
+  # AgentLego - Text to BBox
+  - class_name: verl.tools.agentlego_v2_tools.TextToBboxTool
+    config:
+      timeout_s: 180
+      dataset: "GTA"
+      port: 9400
+      max_retries: 1
+    tool_schema:
+      type: function
+      function:
+        name: text_to_bbox
+        description: Find a text-referred object in an image and return bounding box. JSON: {"path":"image_3.jpg","text":"bottle","top1":true}.
+        parameters:
+          type: object
+          properties:
+            query:
+              type: string
+              description: JSON string payload
+          required: ["query"]
+
+  # AgentLego - Count Given Object
+  - class_name: verl.tools.agentlego_v2_tools.CountGivenObjectTool
+    config:
+      timeout_s: 180
+      dataset: "GTA"
+      port: 9400
+      max_retries: 1
+    tool_schema:
+      type: function
+      function:
+        name: count_given_object
+        description: Count occurrences of an object in an image. JSON: {"path":"image_4.jpg","object":"beer"}.
+        parameters:
+          type: object
+          properties:
+            query:
+              type: string
+              description: JSON string payload
+          required: ["query"]
+
+  # AgentLego - Region Attribute Description
+  - class_name: verl.tools.agentlego_v2_tools.RegionAttributeDescriptionTool
+    config:
+      timeout_s: 180
+      dataset: "GTA"
+      port: 9400
+      max_retries: 1
+    tool_schema:
+      type: function
+      function:
+        name: region_attribute_description
+        description: Describe an attribute of a region. JSON: {"path":"image_5.jpg","bbox":[50,50,200,200],"attribute":"color"}.
+        parameters:
+          type: object
+          properties:
+            query:
+              type: string
+              description: JSON string payload
+          required: ["query"]
