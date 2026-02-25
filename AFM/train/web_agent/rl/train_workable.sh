@@ -53,12 +53,12 @@ EXPERIMENT_DIR=$(dirname "$(readlink -f "$0")")
 
 export WANDB_MODE="online"
 export WANDB_PROJECT="qwen3_8b_base_rl"
-export EXPERIMENT_NAME="QWEN3-VL-8B-SFT-N-4-sglang-BS-3-Steps-320-Epoch-3-C-16k"
+export EXPERIMENT_NAME="QWEN3-DENSE-8B-SFT-N-4-sglang-BS-3-Steps-320-Epoch-3-C-16k"
 # export BASE_MODEL="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/models/Qwen3-8B"   # your train model path
 export BASE_MODEL="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/models/Qwen3-8B-sft-CoA-1828"   # your train model path
 export VLLM_ATTENTION_BACKEND=XFORMERS
 
-CKPT_DIR="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/AFM/train/web_agent/rl/QWEN3-VL-8B-SFT-N-4-sglang-BS-3-Steps-320-Epoch-3-C-16k/global_step_150"
+# CKPT_DIR="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/AFM/train/web_agent/rl/QWEN3-VL-8B-SFT-N-4-sglang-BS-3-Steps-320-Epoch-3-C-16k/global_step_150"
 
 TRAIN_DATASETS="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/AFM-WebAgent-RL-Dataset/train_split.parquet"   # your train dataset
 VAL_DATASETS="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/AFM-WebAgent-RL-Dataset/val_split.parquet" # "your val datasets"
@@ -70,6 +70,7 @@ VAL_DATASETS="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/AFM-WebAgent-RL
 CODE_CONFIG="${CURRENT_DIR}/verl/verl/tools/config/code_tool_config/code_executor.yaml"
 # search tools
 SEARCH_CONFIG="${CURRENT_DIR}/verl/verl/tools/config/search_tool_config/training_servers_config.yaml"
+# SEARCH_CONFIG="${CURRENT_DIR}/verl/verl/tools/config/search_tool_config/training_servers_config_new.yaml"
 # afm tools
 AFM_CONFIG="${CURRENT_DIR}/verl/verl/tools/config/afm_tool_config/afm_tool_config.yaml" 
 
@@ -79,8 +80,6 @@ AFM_CONFIG="${CURRENT_DIR}/verl/verl/tools/config/afm_tool_config/afm_tool_confi
 cd verl
 PYTHONUNBUFFERED=1 python3 -m verl.trainer.main_ppo \
     algorithm.adv_estimator=grpo \
-    trainer.resume_mode="resume_path" \
-    trainer.resume_from_path="$CKPT_DIR" \
     algorithm.filter_groups.enable=true \
     data.train_files=[\"${TRAIN_DATASETS}\"] \
     data.val_files=[\"${VAL_DATASETS}\"] \
@@ -146,10 +145,10 @@ PYTHONUNBUFFERED=1 python3 -m verl.trainer.main_ppo \
     actor_rollout_ref.rollout.multi_turn.use_xml_tool_parser=true \
     actor_rollout_ref.rollout.multi_turn.tool_config_path="$SEARCH_CONFIG" \
     reward_model.reward_manager="batch" \
-    custom_reward_function.train_path="${CURRENT_DIR}/verl/verl/utils/reward_score/grm_simple.py" \
-    custom_reward_function.train_name="compute_score_grm_batch" \
-    custom_reward_function.val_path="${CURRENT_DIR}/verl/verl/utils/reward_score/grm_simple.py" \
-    custom_reward_function.val_name="compute_score_grm_batch" \
+    custom_reward_function.train_path="${CURRENT_DIR}/verl/verl/utils/reward_score/grm_dense.py" \
+    custom_reward_function.train_name="compute_score_grm_batch_with_obs" \
+    custom_reward_function.val_path="${CURRENT_DIR}/verl/verl/utils/reward_score/grm_dense.py" \
+    custom_reward_function.val_name="compute_score_grm_batch_with_obs" \
     +actor_rollout_ref.ref.fsdp_config.optimizer_offload=true \
     actor_rollout_ref.rollout.enforce_eager=true \
     actor_rollout_ref.rollout.free_cache_engine=true \
@@ -157,3 +156,5 @@ PYTHONUNBUFFERED=1 python3 -m verl.trainer.main_ppo \
     # actor_rollout_ref.actor.use_torch_compile=false \
     # actor_rollout_ref.ref.use_torch_compile=false \
     # actor_rollout_ref.rollout.enable_chunked_prefill=false \
+    # trainer.resume_mode="resume_path" \
+    # trainer.resume_from_path="$CKPT_DIR" \

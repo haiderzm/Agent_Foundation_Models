@@ -40,7 +40,6 @@ class _AgentLegoSingleTool(BaseTool):
         super().__init__(config, tool_schema)
         # self._instance_dict: Dict[str, Dict[str, Any]] = {}
         self._instance_dict = {}
-        super().__init__(config, tool_schema)
 
         server_host = os.environ.get("SERVER_HOST")
         if not server_host:

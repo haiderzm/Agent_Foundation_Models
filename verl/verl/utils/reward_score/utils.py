@@ -92,3 +92,21 @@ def verify_format_repetition(response):
         return False
 
     return True
+
+
+def count_repeated_tool_calls(response: str) -> int:
+    web_search_queries = re.findall(r'<web_search>(.*?)</web_search>', response, re.DOTALL)
+    crawl_page_queries = re.findall(r'<crawl_page>(.*?)</crawl_page>', response, re.DOTALL)
+
+    # normalize: lowercase + collapse whitespace
+    def normalize(q):
+        return " ".join(q.lower().split())
+
+    web_search_queries = [normalize(q) for q in web_search_queries if q.strip()]
+    crawl_page_queries = [normalize(q) for q in crawl_page_queries if q.strip()]
+
+    repeats = 0
+    repeats += len(web_search_queries) - len(set(web_search_queries))
+    repeats += len(crawl_page_queries) - len(set(crawl_page_queries))
+
+    return repeats

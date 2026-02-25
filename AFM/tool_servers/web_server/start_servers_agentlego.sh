@@ -51,7 +51,7 @@ if [[ "$cmd" == "start" ]]; then
     echo "AgentLegoToolServerV2 already running on port $AGENTLEGO_TOOL_PORT"
   else
     echo "Starting AgentLegoToolServerV2 on port $AGENTLEGO_TOOL_PORT..."
-    CUDA_VISIBLE_DEVICES=2 nohup python -u "$DIR/v2/agentlego_server_v2.py" > "$logf" 2>&1 &
+    CUDA_VISIBLE_DEVICES=4 nohup python -u "$DIR/v2/agentlego_server_v2.py" > "$logf" 2>&1 &
   fi
 
 # =====================================================================================================================
