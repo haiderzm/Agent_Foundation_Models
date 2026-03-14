@@ -55,13 +55,13 @@ LLM_JUDGE_API_KEY = os.getenv("GRM_API_KEY")
 LLM_JUDGE_BASE_URL = os.getenv("GRM_BASE_URL", "https://api.openai.com/v1")
 LLM_JUDGE_MODEL_NAME = os.getenv("GRM_MODEL_NAME", "gpt-4.1-mini")
 
-# OBS_JUDGE_API_KEY = os.getenv("OBS_JUDGE_API_KEY", LLM_JUDGE_API_KEY)
-# OBS_JUDGE_BASE_URL = os.getenv("OBS_JUDGE_BASE_URL", LLM_JUDGE_BASE_URL)
-# OBS_JUDGE_MODEL_NAME = os.getenv("OBS_JUDGE_MODEL_NAME", "Qwen/Qwen3-235B-A22B-Instruct-2507")
+# OBS_JUDGE_API_KEY = os.getenv("SUMMARY_OPENAI_API_KEY")
+# OBS_JUDGE_BASE_URL = os.getenv("SUMMARY_OPENAI_API_BASE_URL", "https://api.deepinfra.com/v1/openai")
+# OBS_JUDGE_MODEL_NAME = os.getenv("SUMMARY_MODEL", "Qwen/Qwen3-235B-A22B-Instruct-2507")
 
 OBS_JUDGE_API_KEY = os.getenv("GRM_API_KEY")
 OBS_JUDGE_BASE_URL = os.getenv("GRM_BASE_URL", "https://api.openai.com/v1")
-OBS_JUDGE_MODEL_NAME = os.getenv("GRM_MODEL_NAME", "gpt-4.1-mini")
+OBS_JUDGE_MODEL_NAME = "gpt-4o-mini"
 
 obs_client = openai.AsyncOpenAI(
     api_key=OBS_JUDGE_API_KEY,

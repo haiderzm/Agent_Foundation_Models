@@ -13,11 +13,21 @@ qwen_api_pool = [
     #     "key": os.environ.get("UNI_API_KEY"),
     #     "model": "qwen2.5-72b-instruct",
     # },
+    # {
+    #     "url": "https://api.openai.com/v1",
+    #     "key": os.environ.get("UNI_API_KEY"),
+    #     "model": "gpt-4o-mini",
+    # },
     {
-        "url": "https://api.openai.com/v1",
-        "key": os.environ.get("UNI_API_KEY"),
-        "model": "gpt-4.1-mini",
+        "url": "http://localhost:10000/v1",  
+        "key": "empty",            
+        "model": "Qwen3-30B-A3B-Instruct-2507-FP8",
     },
+    # {
+    #     "url": "https://api.deepinfra.com/v1/openai",
+    #     "key": os.environ.get("UNI_API_KEY"),
+    #     "model": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+    # },
     # other qwen api provider ...
 ]
 

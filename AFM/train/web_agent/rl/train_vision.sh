@@ -22,7 +22,7 @@ CLIP_RATIO_LOW=0.2
 CLIP_RATIO_HIGH=0.28
 
 # context window
-max_prompt_length=$((1024 * 2))
+max_prompt_length=$((1024 * 3))
 max_response_length=$((1024 * 14))
 actor_ppo_max_token_len=$((max_prompt_length + max_response_length))
 infer_ppo_max_token_len=$((max_prompt_length + max_response_length))
@@ -43,7 +43,7 @@ export HYDRA_FULL_ERROR=1
 export NCCL_P2P_DISABLE=1
 export NCCL_DEBUG_SUBSYS=ALL
 export NNODES=1
-export PROJECT_NAME="qwen3_8b_base_rl"
+export PROJECT_NAME="qwen3_8b_base_rl_vision"
 
 # export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128
@@ -52,16 +52,17 @@ export TORCH_DISABLE_FOREACH=1
 EXPERIMENT_DIR=$(dirname "$(readlink -f "$0")")
 
 export WANDB_MODE="online"
-export WANDB_PROJECT="qwen3_8b_base_rl"
-export EXPERIMENT_NAME="QWEN3-DENSE-8B-SFT-N-4-sglang-BS-3-Steps-320-Epoch-3-C-16k"
+export WANDB_PROJECT="qwen3_8b_base_rl_vision"
+export EXPERIMENT_NAME="2-restored-QWEN3-VISION-8B-SFT-N-4-sglang-BS-3-Steps-320-Epoch-3-C-16k"
 # export BASE_MODEL="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/models/Qwen3-8B"   # your train model path
-export BASE_MODEL="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/models/Qwen3-8B-sft-CoA-1828"   # your train model path
+# export BASE_MODEL="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/models/Qwen3-8B-sft-CoA-1828"   # your train model path
+export BASE_MODEL="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/models/Qwen3-8B-rl-CoA-100"
 export VLLM_ATTENTION_BACKEND=XFORMERS
 
-# CKPT_DIR="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/AFM/train/web_agent/rl/QWEN3-VL-8B-SFT-N-4-sglang-BS-3-Steps-320-Epoch-3-C-16k/global_step_150"
+CKPT_DIR="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/AFM/train/web_agent/rl/2-QWEN3-VISION-8B-SFT-N-4-sglang-BS-3-Steps-320-Epoch-3-C-16k/global_step_100"
 
-TRAIN_DATASETS="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/AFM-WebAgent-RL-Dataset/train_split.parquet"   # your train dataset
-VAL_DATASETS="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/AFM-WebAgent-RL-Dataset/val_split.parquet" # "your val datasets"
+TRAIN_DATASETS="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/Vision-RL-Dataset-2/vision_train_dataset.parquet"   # your train dataset
+VAL_DATASETS="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/Vision-RL-Dataset-2/vision_val_dataset.parquet" # "your val datasets"
 
 # =====================================================================================================================
 #                                      Tool
@@ -69,8 +70,8 @@ VAL_DATASETS="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/AFM-WebAgent-RL
 # code tool
 CODE_CONFIG="${CURRENT_DIR}/verl/verl/tools/config/code_tool_config/code_executor.yaml"
 # search tools
-SEARCH_CONFIG="${CURRENT_DIR}/verl/verl/tools/config/search_tool_config/training_servers_config.yaml"
-# SEARCH_CONFIG="${CURRENT_DIR}/verl/verl/tools/config/search _tool_config/training_servers_config_new.yaml"
+# SEARCH_CONFIG="${CURRENT_DIR}/verl/verl/tools/config/search_tool_config/training_servers_config.yaml"
+SEARCH_CONFIG="${CURRENT_DIR}/verl/verl/tools/config/search_tool_config/training_servers_config_new.yaml"
 # afm tools
 AFM_CONFIG="${CURRENT_DIR}/verl/verl/tools/config/afm_tool_config/afm_tool_config.yaml" 
 
@@ -81,6 +82,8 @@ cd verl
 PYTHONUNBUFFERED=1 python3 -m verl.trainer.main_ppo \
     algorithm.adv_estimator=grpo \
     algorithm.filter_groups.enable=true \
+    trainer.resume_mode="resume_path" \
+    trainer.resume_from_path="$CKPT_DIR" \
     data.train_files=[\"${TRAIN_DATASETS}\"] \
     data.val_files=[\"${VAL_DATASETS}\"] \
     data.train_batch_size="${TRAIN_BS}" \

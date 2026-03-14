@@ -13,9 +13,9 @@ logger = logging.getLogger(__name__)
 logger.setLevel(os.getenv("VERL_LOGGING_LEVEL", "WARN"))
 
 DATASET_ROOTS = {
-    "GTA": "/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models",
-    "GAIA": "/share/softwares/haider/Agent_Foundation_Models/AFM/data/web_agent/gaia/files",
-    "AGENTX": "/share/softwares/haider/Agent_Foundation_Models/AFM/data/web_agent/Agent-X/files",
+    "GTA": "/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/Vision-RL-Dataset",
+    "GAIA": "/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/Vision-RL-Dataset",
+    "AGENTX": "/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/Vision-RL-Dataset",
 }
 
 # If you want fallback parsing identical to your existing script, you can import it:
@@ -114,13 +114,16 @@ class _AgentLegoSingleTool(BaseTool):
         return payload
 
     async def execute(self, instance_id: str, parameters: Dict[str, Any], **kwargs) -> Tuple[str, float, dict]:
+        print(f"\n[DEBUG] {self.TOOL_NAME} execution started for instance: {instance_id}")
         query = parameters.get("query")
+        print(f"[DEBUG] Raw query from model: {query}")
         if not query or not isinstance(query, str):
             err = "Error: 'query' is missing, empty, or not a string."
             logger.error(f"[{self.TOOL_NAME}] {err} parameters={parameters}")
             return json.dumps({"error": err}), 0.0, {"error": "invalid_parameters"}
 
         task = self._infer_task_from_messages(kwargs)
+        print(f"[DEBUG] Inferred task context: {task[:100]}...")
 
         payload = _safe_json_loads(query)
         if payload is None:
@@ -129,7 +132,18 @@ class _AgentLegoSingleTool(BaseTool):
             logger.error(f"[{self.TOOL_NAME}] {err} query={query[:200]}")
             return json.dumps({"error": err}), 0.0, {"error": "invalid_query_format"}
 
+
         payload = self._resolve_path(payload)
+
+        original_path = payload.get("path")
+        resolved_path = payload.get("path")
+        print(f"[DEBUG] Path resolution: {original_path} -> {resolved_path}")
+
+        # --- DEBUG PRINT 4: File Existence Check ---
+        if os.path.exists(resolved_path):
+            print(f"[DEBUG] SUCCESS: File found at {resolved_path}")
+        else:
+            print(f"[DEBUG] ERROR: File NOT FOUND at {resolved_path}")
 
         body = {
             "tool": self.TOOL_NAME,
@@ -207,24 +221,24 @@ class CountGivenObjectTool(_AgentLegoSingleTool):
 class RegionAttributeDescriptionTool(_AgentLegoSingleTool):
     TOOL_NAME = "region_attribute_description"
 
-# You can add the rest similarly:
-class DocumentReaderTool(_AgentLegoSingleTool):
-    TOOL_NAME = "document_reader"
+# # You can add the rest similarly:
+# class DocumentReaderTool(_AgentLegoSingleTool):
+#     TOOL_NAME = "document_reader"
 
-class PythonInterpreterTool(_AgentLegoSingleTool):
-    TOOL_NAME = "python_interpreter"
+# class PythonInterpreterTool(_AgentLegoSingleTool):
+#     TOOL_NAME = "python_interpreter"
 
-class MediaAnalysisTool(_AgentLegoSingleTool):
-    TOOL_NAME = "media_analysis"
+# class MediaAnalysisTool(_AgentLegoSingleTool):
+#     TOOL_NAME = "media_analysis"
 
-class VideoMetadataTool(_AgentLegoSingleTool):
-    TOOL_NAME = "video_metadata"
+# class VideoMetadataTool(_AgentLegoSingleTool):
+#     TOOL_NAME = "video_metadata"
 
-class VideoDescriptionTool(_AgentLegoSingleTool):
-    TOOL_NAME = "video_description"
+# class VideoDescriptionTool(_AgentLegoSingleTool):
+#     TOOL_NAME = "video_description"
 
-class VideoCountGivenObjectTool(_AgentLegoSingleTool):
-    TOOL_NAME = "video_count_given_object"
+# class VideoCountGivenObjectTool(_AgentLegoSingleTool):
+#     TOOL_NAME = "video_count_given_object"
 
-class VideoOCRTool(_AgentLegoSingleTool):
-    TOOL_NAME = "video_ocr"
+# class VideoOCRTool(_AgentLegoSingleTool):
+#     TOOL_NAME = "video_ocr"

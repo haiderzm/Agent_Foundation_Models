@@ -352,11 +352,11 @@ if __name__ == "__main__":
     #     "attribute": "color"
     # }), dataset="GAIA"))
 
-    doc_path = "3da89939-209c-4086-8520-7eb734e6b4ef.xlsx"
+    # doc_path = "3da89939-209c-4086-8520-7eb734e6b4ef.xlsx"
 
-    print(AgentLegoTool("document_reader", json.dumps({
-        "path": doc_path
-    }), dataset="GAIA"))
+    # print(AgentLegoTool("document_reader", json.dumps({
+    #     "path": doc_path
+    # }), dataset="GAIA"))
 
     # zip_path = "9b54f9d9-35ee-4a14-b62f-d130ea00317f.zip"
     # print(AgentLegoTool("zip_tool", json.dumps({

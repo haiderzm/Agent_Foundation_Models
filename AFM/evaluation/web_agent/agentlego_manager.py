@@ -18,7 +18,8 @@ sys.path.insert(0, "/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/GTA/agent
 from agentlego.apis import load_tool
 # from agentlego.tools.python_interpreter.python_interpreter import PythonInterpreter
 from agentlego.tools.python_interpreter.python_interpreter import UniversalPythonInterpreter
-from benchmark import ImageDescription, CountGivenObject, RegionAttributeDescription
+# from benchmark import ImageDescription, CountGivenObject, RegionAttributeDescription
+from benchmark_opt import ImageDescription, CountGivenObject, RegionAttributeDescription, Qwen2VLInferencer
 from video_tools import (
     video_metadata as _video_metadata,
     video_description as _video_description,
@@ -47,10 +48,10 @@ _CANONICAL = {
     "python_interpreter",
     "media_analysis",
 
-    "video_metadata",
-    "video_description",
-    "video_count_given_object",
-    "video_ocr"
+    # "video_metadata",
+    # "video_description",
+    # "video_count_given_object",
+    # "video_ocr"
 }
 
 def _mute_rich_live_once():
@@ -82,6 +83,10 @@ class AgentLegoToolManager:
         self.device = device
         self.tools: Dict[str, Any] = {}
         self._ensure_nltk_assets()
+        self.inferencer = Qwen2VLInferencer(
+                                model="/home/Md.Zama@mbzuai.ac.ae/Agent_Foundation_Models/models/Qwen2.5-VL-7B-Instruct",
+                                device=self.device,
+                            )
         if preload:
             self._load_all()
 
@@ -142,15 +147,24 @@ class AgentLegoToolManager:
 
         elif name == "image_description":
             _mute_rich_live_once()
-            tool = ImageDescription(device=self.device)
+            tool = ImageDescription(
+                        inferencer=self.inferencer,
+                        device=self.device
+                    )
 
         elif name == "count_given_object":
             _mute_rich_live_once()
-            tool = CountGivenObject(device=self.device)
+            tool = CountGivenObject(
+                        inferencer=self.inferencer,
+                        device=self.device
+                    )
 
         elif name == "region_attribute_description":
             _mute_rich_live_once()
-            tool = RegionAttributeDescription(device=self.device)
+            tool = RegionAttributeDescription(
+                        inferencer=self.inferencer,
+                        device=self.device
+                    )
         
         elif name == "document_reader":
             tool = DocumentReader()
@@ -158,14 +172,14 @@ class AgentLegoToolManager:
         # elif name == "zip_tool":
         #     tool = ZipTool(overwrite=True)
 
-        elif name == "video_metadata":
-            tool = _video_metadata
-        elif name == "video_description":
-            tool = _video_description
-        elif name == "video_count_given_object":
-            tool = _video_count_given_object
-        elif name == "video_ocr":
-            tool = _video_ocr
+        # elif name == "video_metadata":
+        #     tool = _video_metadata
+        # elif name == "video_description":
+        #     tool = _video_description
+        # elif name == "video_count_given_object":
+        #     tool = _video_count_given_object
+        # elif name == "video_ocr":
+        #     tool = _video_ocr
 
 
         self.tools[name] = tool
@@ -251,31 +265,31 @@ class AgentLegoToolManager:
             return json.dumps(result, ensure_ascii=False)
         
         # ---- video tools (API-backed; no GPU autocast needed here) ----
-        if tool_name == "video_metadata":
-            result = tool(path)
-            return json.dumps(result, ensure_ascii=False)
+        # if tool_name == "video_metadata":
+        #     result = tool(path)
+        #     return json.dumps(result, ensure_ascii=False)
 
-        if tool_name == "video_description":
-            question = args.get("question") or args.get("text") or args.get("query") or ""
-            target_fps = float(args.get("target_fps", 6.0))
-            chunk_size = int(args.get("chunk_size", 12))
-            max_side = int(args.get("max_side", 896))
-            result = tool(path, question, target_fps=target_fps, chunk_size=chunk_size, max_side=max_side)
-            return json.dumps(result, ensure_ascii=False)
+        # if tool_name == "video_description":
+        #     question = args.get("question") or args.get("text") or args.get("query") or ""
+        #     target_fps = float(args.get("target_fps", 6.0))
+        #     chunk_size = int(args.get("chunk_size", 12))
+        #     max_side = int(args.get("max_side", 896))
+        #     result = tool(path, question, target_fps=target_fps, chunk_size=chunk_size, max_side=max_side)
+        #     return json.dumps(result, ensure_ascii=False)
 
-        if tool_name == "video_count_given_object":
-            obj = args.get("object") or args.get("name") or args.get("query") or ""
-            target_fps = float(args.get("target_fps", 6.0))
-            max_side = int(args.get("max_side", 896))
-            result = tool(path, obj, target_fps=target_fps, max_side=max_side)
-            return json.dumps(result, ensure_ascii=False)
+        # if tool_name == "video_count_given_object":
+        #     obj = args.get("object") or args.get("name") or args.get("query") or ""
+        #     target_fps = float(args.get("target_fps", 6.0))
+        #     max_side = int(args.get("max_side", 896))
+        #     result = tool(path, obj, target_fps=target_fps, max_side=max_side)
+        #     return json.dumps(result, ensure_ascii=False)
 
-        if tool_name == "video_ocr":
-            target_fps = float(args.get("target_fps", 6.0))
-            max_side = int(args.get("max_side", 896))
-            max_frames = int(args.get("max_frames", 24))
-            result = tool(path, target_fps=target_fps, max_side=max_side, max_frames=max_frames)
-            return json.dumps(result, ensure_ascii=False)
+        # if tool_name == "video_ocr":
+        #     target_fps = float(args.get("target_fps", 6.0))
+        #     max_side = int(args.get("max_side", 896))
+        #     max_frames = int(args.get("max_frames", 24))
+        #     result = tool(path, target_fps=target_fps, max_side=max_side, max_frames=max_frames)
+        #     return json.dumps(result, ensure_ascii=False)
 
 
         # all others in mixed precision

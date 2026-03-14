@@ -42,14 +42,17 @@ Predicted Answer: {pred_answer}
 If the prediction and answer are semantically equivalent despite the expression order, the description format, and the use of measurement units and the order, then your judgement will be correct.
 {{  
 "rationale": "your rationale for the judgement, as a text", 
-"judgement": "your judgement result, can only be 'correct' or 'incorrect' 
+"judgement": "your judgement result, can only be 'correct' or 'incorrect'"
 }}
 """
 
-# Environment variables for LLM judge
-LLM_JUDGE_API_KEY = os.getenv("GRM_API_KEY")
-LLM_JUDGE_BASE_URL = os.getenv("GRM_BASE_URL", "https://api.openai.com/v1")
-LLM_JUDGE_MODEL_NAME = os.getenv("GRM_MODEL_NAME", "gpt-4.1-mini")
+# # Environment variables for LLM judge
+# LLM_JUDGE_API_KEY = os.getenv("GRM_API_KEY")
+# LLM_JUDGE_BASE_URL = os.getenv("GRM_BASE_URL", "https://api.openai.com/v1")
+# LLM_JUDGE_MODEL_NAME = os.getenv("GRM_MODEL_NAME", "gpt-4.1-mini")
+LLM_JUDGE_API_KEY = "empty"
+LLM_JUDGE_BASE_URL = "http://localhost:10000/v1"
+LLM_JUDGE_MODEL_NAME = "Qwen3-30B-A3B-Instruct-2507-FP8"
 
 client = openai.AsyncOpenAI(
     api_key=LLM_JUDGE_API_KEY,
